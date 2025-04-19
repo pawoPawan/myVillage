@@ -1,0 +1,199 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}Villages - My Village{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Villages</h1>
+        {% if user.is_authenticated and user_profile.aadhaar_verified %}
+            <a href="{% url 'village_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Village
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Administrative Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <!-- District Filter -->
+                <div class="col-md-4">
+                    <label for="district" class="form-label">District</label>
+                    <select name="district" id="district" class="form-select" onchange="this.form.submit()">
+                        <option value="">All Districts</option>
+                        {% for district in districts %}
+                        <option value="{{ district.id }}" {% if selected_district == district.id|stringformat:"s" %}selected{% endif %}>
+                            {{ district.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Block Filter -->
+                <div class="col-md-4">
+                    <label for="block" class="form-label">Block</label>
+                    <select name="block" id="block" class="form-select" onchange="this.form.submit()" {% if not blocks %}disabled{% endif %}>
+                        <option value="">All Blocks</option>
+                        {% for block in blocks %}
+                        <option value="{{ block.id }}" {% if selected_block == block.id|stringformat:"s" %}selected{% endif %}>
+                            {{ block.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Police Station Filter -->
+                <div class="col-md-4">
+                    <label for="police_station" class="form-label">Police Station</label>
+                    <select name="police_station" id="police_station" class="form-select" onchange="this.form.submit()" {% if not police_stations %}disabled{% endif %}>
+                        <option value="">All Police Stations</option>
+                        {% for ps in police_stations %}
+                        <option value="{{ ps.id }}" {% if selected_police_station == ps.id|stringformat:"s" %}selected{% endif %}>
+                            {{ ps.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Post Office Filter -->
+                <div class="col-md-4">
+                    <label for="post_office" class="form-label">Post Office</label>
+                    <select name="post_office" id="post_office" class="form-select" onchange="this.form.submit()" {% if not post_offices %}disabled{% endif %}>
+                        <option value="">All Post Offices</option>
+                        {% for po in post_offices %}
+                        <option value="{{ po.id }}" {% if selected_post_office == po.id|stringformat:"s" %}selected{% endif %}>
+                            {{ po.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Panchayat Filter -->
+                <div class="col-md-4">
+                    <label for="panchayat" class="form-label">Panchayat</label>
+                    <select name="panchayat" id="panchayat" class="form-select" onchange="this.form.submit()" {% if not panchayats %}disabled{% endif %}>
+                        <option value="">All Panchayats</option>
+                        {% for panchayat in panchayats %}
+                        <option value="{{ panchayat.id }}" {% if selected_panchayat == panchayat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ panchayat.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if villages %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for village in villages %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ village.name }}</h5>
+                            <p class="card-text">
+                                <strong>District:</strong> {{ village.panchayat.post_office.police_station.block.district.name }}<br>
+                                <strong>Block:</strong> {{ village.panchayat.post_office.police_station.block.name }}<br>
+                                <strong>Police Station:</strong> {{ village.panchayat.post_office.police_station.name }}<br>
+                                <strong>Post Office:</strong> {{ village.panchayat.post_office.name }}<br>
+                                <strong>Panchayat:</strong> {{ village.panchayat.name }}
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-primary me-2">{{ village.members.count }} Members</span>
+                                <span class="badge bg-success me-2">{{ village.events.count }} Events</span>
+                                <span class="badge bg-info">{{ village.services.count }} Services</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'village_detail' village.pk %}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No villages found. 
+            {% if user.is_authenticated and user_profile.aadhaar_verified %}
+                <a href="{% url 'village_create' %}" class="alert-link">Add a new village</a> to get started.
+            {% else %}
+                <a href="{% url 'login' %}" class="alert-link">Login</a> to add a new village.
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all filter dropdowns
+    const districtSelect = document.getElementById('district');
+    const blockSelect = document.getElementById('block');
+    const policeStationSelect = document.getElementById('police_station');
+    const postOfficeSelect = document.getElementById('post_office');
+    const panchayatSelect = document.getElementById('panchayat');
+    
+    // Function to reset dependent dropdowns
+    function resetDependentDropdowns(startFrom) {
+        const dropdowns = ['block', 'police_station', 'post_office', 'panchayat'];
+        const startIndex = dropdowns.indexOf(startFrom);
+        
+        for (let i = startIndex; i < dropdowns.length; i++) {
+            const dropdown = document.getElementById(dropdowns[i]);
+            dropdown.value = '';
+            dropdown.disabled = true;
+        }
+    }
+
+    // Handle district change
+    districtSelect.addEventListener('change', function() {
+        const districtId = this.value;
+        
+        if (!districtId) {
+            resetDependentDropdowns('block');
+            this.form.submit();
+            return;
+        }
+        
+        // Enable block dropdown if district is selected
+        blockSelect.disabled = false;
+        this.form.submit();
+    });
+
+    // Handle block change
+    blockSelect.addEventListener('change', function() {
+        const blockId = this.value;
+        
+        if (!blockId) {
+            resetDependentDropdowns('police_station');
+            this.form.submit();
+            return;
+        }
+        
+        // Enable police station dropdown if block is selected
+        policeStationSelect.disabled = false;
+        this.form.submit();
+    });
+    
+    // Handle police station change
+    policeStationSelect.addEventListener('change', function() {
+        const policeStationId = this.value;
+        
+        if (!policeStationId) {
+            resetDependentDropdowns('post_office');
+            this.form.submit();
+            return;
+        }
+        
+        // Enable post office dropdown if police station is selected
+        postOfficeSelect.disabled = false;
+        this.form.submit();
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

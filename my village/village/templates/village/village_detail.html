@@ -1,0 +1,193 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}{{ village.name }} - My Village{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h1 class="card-title">{{ village.name }}</h1>
+                    <p class="text-muted">
+                        <i class="fas fa-map-marker-alt"></i> 
+                        {{ village.panchayat.post_office.police_station.block.district.name }} > 
+                        {{ village.panchayat.post_office.police_station.block.name }} > 
+                        {{ village.panchayat.post_office.police_station.name }} > 
+                        {{ village.panchayat.post_office.name }} > 
+                        {{ village.panchayat.name }}
+                    </p>
+                    
+                    <div class="mt-3">
+                        <span class="badge bg-primary me-2">{{ village.members.count }} Members</span>
+                        <span class="badge bg-success me-2">{{ village.events.count }} Events</span>
+                        <span class="badge bg-info">{{ village.services.count }} Services</span>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                        {% if user_profile.village == village %}
+                            <div class="alert alert-success mt-3">
+                                <i class="fas fa-check-circle"></i> You are a member of this village.
+                            </div>
+                        {% else %}
+                            <div class="mt-3">
+                                {% if user_profile.aadhaar_verified %}
+                                    <a href="{% url 'join_village' village.pk %}" class="btn btn-primary">
+                                        <i class="fas fa-user-plus"></i> Join This Village
+                                    </a>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i> 
+                                        You need to verify your Aadhaar card to join this village.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="mt-3">
+                            <a href="{% url 'login' %}" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Login to Join
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">About {{ village.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <p>Welcome to {{ village.name }}! This village is located in {{ village.panchayat.post_office.police_station.block.district.name }} district.</p>
+                    <p>Join our community to connect with fellow villagers, participate in events, and access local services.</p>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Recent Events</h5>
+                </div>
+                <div class="card-body">
+                    {% if village.events.all %}
+                        <div class="list-group">
+                            {% for event in village.events.all|slice:":5" %}
+                                <a href="{% url 'event_detail' event.pk %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ event.title }}</h5>
+                                        <small>{{ event.start_date|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ event.description|truncatechars:100 }}</p>
+                                    <small>
+                                        <span class="badge bg-{{ event.get_event_type_display|lower }}">{{ event.get_event_type_display }}</span>
+                                    </small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        {% if village.events.count > 5 %}
+                            <div class="text-center mt-3">
+                                <a href="{% url 'event_list' %}" class="btn btn-outline-success">View All Events</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p>No events found for this village.</p>
+                        {% if user.is_authenticated and user_profile.village == village %}
+                            <a href="{% url 'event_create' %}" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Create Event
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Local Services</h5>
+                </div>
+                <div class="card-body">
+                    {% if village.services.all %}
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            {% for service in village.services.all|slice:":4" %}
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ service.name }}</h5>
+                                            <p class="card-text">{{ service.description|truncatechars:100 }}</p>
+                                            <span class="badge bg-{{ service.get_service_type_display|lower }}">{{ service.get_service_type_display }}</span>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a href="{% url 'service_detail' service.pk %}" class="btn btn-sm btn-outline-info">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if village.services.count > 4 %}
+                            <div class="text-center mt-3">
+                                <a href="{% url 'service_list' %}" class="btn btn-outline-info">View All Services</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p>No services found for this village.</p>
+                        {% if user.is_authenticated and user_profile.village == village %}
+                            <a href="{% url 'service_create' %}" class="btn btn-info">
+                                <i class="fas fa-plus"></i> Add Service
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Village Members</h5>
+                </div>
+                <div class="card-body">
+                    {% if village.members.all %}
+                        <div class="list-group">
+                            {% for member in village.members.all|slice:":10" %}
+                                <a href="{% url 'member_detail' member.pk %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ member.user.get_full_name }}</h6>
+                                        <small>{{ member.profession }}</small>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        {% if village.members.count > 10 %}
+                            <div class="text-center mt-3">
+                                <a href="{% url 'member_list' %}" class="btn btn-outline-primary">View All Members</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p>No members found for this village.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if user.is_authenticated and user_profile.village == village %}
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'event_create' %}" class="btn btn-success">
+                                <i class="fas fa-calendar-plus"></i> Create Event
+                            </a>
+                            <a href="{% url 'service_create' %}" class="btn btn-info">
+                                <i class="fas fa-plus-circle"></i> Add Service
+                            </a>
+                            <a href="{% url 'my_relationships' %}" class="btn btn-primary">
+                                <i class="fas fa-users"></i> Manage Relationships
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

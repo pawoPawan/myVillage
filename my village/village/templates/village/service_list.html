@@ -1,0 +1,58 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}Services - My Village{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Services</h1>
+        {% if user.is_authenticated and user.userprofile.village %}
+            <a href="#" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Service
+            </a>
+        {% endif %}
+    </div>
+
+    {% if services %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for service in services %}
+                <div class="col">
+                    <div class="card h-100 service-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ service.name }}</h5>
+                            <p class="card-text">
+                                <span class="badge bg-primary">{{ service.get_service_type_display }}</span>
+                            </p>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                {{ service.village.name }}, {{ service.village.district }}
+                            </p>
+                            <p class="card-text">
+                                <i class="fas fa-map-pin"></i> {{ service.address }}
+                            </p>
+                            <p class="card-text">{{ service.description|truncatewords:30 }}</p>
+                            {% if service.contact_info %}
+                                <p class="card-text">
+                                    <i class="fas fa-phone"></i> {{ service.contact_info }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No services found. 
+            {% if user.is_authenticated and user.userprofile.village %}
+                <a href="#" class="alert-link">Add a new service</a> to your village.
+            {% elif user.is_authenticated %}
+                <a href="{% url 'village_list' %}" class="alert-link">Join a village</a> to add services.
+            {% else %}
+                <a href="{% url 'login' %}" class="alert-link">Login</a> to add services.
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

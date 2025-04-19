@@ -1,0 +1,414 @@
+{
+  "state": "Bihar",
+  "state_code": "10",
+  "districts": [
+    {
+      "name": "Araria",
+      "code": "209",
+      "total_villages": 745,
+      "blocks": [
+        {
+          "name": "Forbesganj",
+          "police_stations": [
+            {
+              "name": "Forbesganj Police Station",
+              "post_offices": [
+                {
+                  "name": "Forbesganj Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Forbesganj Panchayat",
+                      "villages": [
+                        {"name": "Forbesganj", "code": "001"},
+                        {"name": "Raniganj", "code": "002"},
+                        {"name": "Jogbani", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Araria",
+          "police_stations": [
+            {
+              "name": "Araria Police Station",
+              "post_offices": [
+                {
+                  "name": "Araria Head Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Araria Panchayat",
+                      "villages": [
+                        {"name": "Araria", "code": "004"},
+                        {"name": "Jokihat", "code": "005"},
+                        {"name": "Palasi", "code": "006"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Patna",
+      "code": "230",
+      "total_villages": 1411,
+      "blocks": [
+        {
+          "name": "Patna Sadar",
+          "police_stations": [
+            {
+              "name": "Patna City Police Station",
+              "post_offices": [
+                {
+                  "name": "Patna GPO",
+                  "panchayats": [
+                    {
+                      "name": "Patna City Panchayat",
+                      "villages": [
+                        {"name": "Patna City", "code": "001"},
+                        {"name": "Danapur", "code": "002"},
+                        {"name": "Phulwari", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Danapur",
+          "police_stations": [
+            {
+              "name": "Danapur Police Station",
+              "post_offices": [
+                {
+                  "name": "Danapur Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Danapur Panchayat",
+                      "villages": [
+                        {"name": "Khagaul", "code": "004"},
+                        {"name": "Maner", "code": "005"},
+                        {"name": "Bihta", "code": "006"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gaya",
+      "code": "236",
+      "total_villages": 2893,
+      "blocks": [
+        {
+          "name": "Bodh Gaya",
+          "police_stations": [
+            {
+              "name": "Bodh Gaya Police Station",
+              "post_offices": [
+                {
+                  "name": "Bodh Gaya Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Bodh Gaya Panchayat",
+                      "villages": [
+                        {"name": "Bodh Gaya", "code": "001"},
+                        {"name": "Barachatti", "code": "002"},
+                        {"name": "Belaganj", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gaya Sadar",
+          "police_stations": [
+            {
+              "name": "Gaya Town Police Station",
+              "post_offices": [
+                {
+                  "name": "Gaya Head Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Gaya City Panchayat",
+                      "villages": [
+                        {"name": "Manpur", "code": "004"},
+                        {"name": "Tekari", "code": "005"},
+                        {"name": "Sherghati", "code": "006"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Muzaffarpur",
+      "code": "216",
+      "total_villages": 1795,
+      "blocks": [
+        {
+          "name": "Muzaffarpur Sadar",
+          "police_stations": [
+            {
+              "name": "Muzaffarpur Town PS",
+              "post_offices": [
+                {
+                  "name": "Muzaffarpur Head Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Muzaffarpur City Panchayat",
+                      "villages": [
+                        {"name": "Muzaffarpur", "code": "001"},
+                        {"name": "Sakra", "code": "002"},
+                        {"name": "Kurhani", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bhagalpur",
+      "code": "224",
+      "total_villages": 1525,
+      "blocks": [
+        {
+          "name": "Bhagalpur Sadar",
+          "police_stations": [
+            {
+              "name": "Bhagalpur Town PS",
+              "post_offices": [
+                {
+                  "name": "Bhagalpur Head Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Bhagalpur City Panchayat",
+                      "villages": [
+                        {"name": "Bhagalpur", "code": "001"},
+                        {"name": "Nathnagar", "code": "002"},
+                        {"name": "Sultanganj", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Arwal",
+      "code": "240",
+      "total_villages": 317,
+      "blocks": [
+        {
+          "name": "Arwal",
+          "police_stations": [
+            {
+              "name": "Arwal Police Station",
+              "post_offices": [
+                {
+                  "name": "Arwal Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Arwal Panchayat",
+                      "villages": [
+                        {"name": "Arwal", "code": "001"},
+                        {"name": "Karpi", "code": "002"},
+                        {"name": "Kaler", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Aurangabad",
+      "code": "235",
+      "total_villages": 1853,
+      "blocks": [
+        {
+          "name": "Aurangabad",
+          "police_stations": [
+            {
+              "name": "Aurangabad Police Station",
+              "post_offices": [
+                {
+                  "name": "Aurangabad Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Aurangabad Panchayat",
+                      "villages": [
+                        {"name": "Aurangabad", "code": "001"},
+                        {"name": "Daudnagar", "code": "002"},
+                        {"name": "Rafiganj", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Banka",
+      "code": "225",
+      "total_villages": 2113,
+      "blocks": [
+        {
+          "name": "Banka",
+          "police_stations": [
+            {
+              "name": "Banka Police Station",
+              "post_offices": [
+                {
+                  "name": "Banka Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Banka Panchayat",
+                      "villages": [
+                        {"name": "Banka", "code": "001"},
+                        {"name": "Amarpur", "code": "002"},
+                        {"name": "Belhar", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Nawada",
+      "code": "234",
+      "total_villages": 1141,
+      "blocks": [
+        {
+          "name": "Nawada Sadar",
+          "police_stations": [
+            {
+              "name": "Nawada Town PS",
+              "post_offices": [
+                {
+                  "name": "Nawada Head Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Nawada City Panchayat",
+                      "villages": [
+                        {"name": "Nawada", "code": "001"},
+                        {"name": "Pakribarawan", "code": "002"},
+                        {"name": "Rajauli", "code": "003"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Warisaliganj",
+          "police_stations": [
+            {
+              "name": "Warisaliganj Police Station",
+              "post_offices": [
+                {
+                  "name": "Warisaliganj Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Warisaliganj Panchayat",
+                      "villages": [
+                        {"name": "Warisaliganj", "code": "004"},
+                        {"name": "Hisua", "code": "005"},
+                        {"name": "Akbarpur", "code": "006"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sirdala",
+          "police_stations": [
+            {
+              "name": "Sirdala Police Station",
+              "post_offices": [
+                {
+                  "name": "Sirdala Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Sirdala Panchayat",
+                      "villages": [
+                        {"name": "Sirdala", "code": "007"},
+                        {"name": "Meskaur", "code": "008"},
+                        {"name": "Kashichak", "code": "009"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Nardiganj",
+          "police_stations": [
+            {
+              "name": "Nardiganj Police Station",
+              "post_offices": [
+                {
+                  "name": "Nardiganj Post Office",
+                  "panchayats": [
+                    {
+                      "name": "Nardiganj Panchayat",
+                      "villages": [
+                        {"name": "Nardiganj", "code": "010"},
+                        {"name": "Govindpur", "code": "011"},
+                        {"name": "Kawakol", "code": "012"}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+} 

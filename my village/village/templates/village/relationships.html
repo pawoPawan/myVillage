@@ -1,0 +1,259 @@
+{% extends 'village/base.html' %}
+{% load static %}
+{% load village_extras %}
+
+{% block title %}My Relationships - My Village{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Search Form -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Search Users</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'my_relationships' %}">
+                        {{ search_form.as_p }}
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="{% url 'my_relationships' %}" class="btn btn-secondary">Clear</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results and Relationships -->
+        <div class="col-md-8">
+            <!-- Search Results -->
+            {% if users %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Search Results</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Village</th>
+                                    <th>Age</th>
+                                    <th>Education</th>
+                                    <th>Profession</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{ user.user.get_full_name }}</td>
+                                    <td>{{ user.village.name }}</td>
+                                    <td>{{ user.age }}</td>
+                                    <td>{{ user.education }}</td>
+                                    <td>{{ user.profession }}</td>
+                                    <td>
+                                        {% if user.id in existing_relationships %}
+                                            <span class="badge bg-info">{{ existing_relationships|get_item:user.id }}</span>
+                                        {% else %}
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRelationshipModal" data-user-id="{{ user.id }}" data-user-name="{{ user.user.get_full_name }}">
+                                                    Add Relationship
+                                                </button>
+                                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#sendRequestModal" data-user-id="{{ user.id }}" data-user-name="{{ user.user.get_full_name }}">
+                                                    Send Request
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Existing Relationships -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">My Relationships</h5>
+                </div>
+                <div class="card-body">
+                    {% if relationships %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Relationship</th>
+                                    <th>Village</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for relationship in relationships %}
+                                <tr>
+                                    <td>{{ relationship.related_user.user.get_full_name }}</td>
+                                    <td>{{ relationship.relationship_type }}</td>
+                                    <td>{{ relationship.related_user.village.name }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#removeRelationshipModal" data-relationship-id="{{ relationship.id }}" data-user-name="{{ relationship.related_user.user.get_full_name }}">
+                                            Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">You haven't added any relationships yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Relationship Modal -->
+<div class="modal fade" id="addRelationshipModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Relationship</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'add_relationship' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="related_user_id" id="relatedUserId">
+                    <p>Add relationship with <strong id="relatedUserName"></strong></p>
+                    <div class="mb-3">
+                        <label for="relationshipType" class="form-label">Relationship Type</label>
+                        <select class="form-select" id="relationshipType" name="relationship_type" required>
+                            <option value="">Select relationship type...</option>
+                            <option value="family">Family</option>
+                            <option value="friend">Friend</option>
+                            <option value="neighbor">Neighbor</option>
+                            <option value="colleague">Colleague</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Relationship</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Send Request Modal -->
+<div class="modal fade" id="sendRequestModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Send Relationship Request</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="" id="sendRequestForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p>Send relationship request to <strong id="requestUserName"></strong></p>
+                    <div class="mb-3">
+                        <label for="requestRelationshipType" class="form-label">Relationship Type</label>
+                        <select class="form-select" id="requestRelationshipType" name="relationship_type" required>
+                            <option value="">Select relationship type...</option>
+                            <option value="family">Family</option>
+                            <option value="friend">Friend</option>
+                            <option value="neighbor">Neighbor</option>
+                            <option value="colleague">Colleague</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requestMessage" class="form-label">Message (Optional)</label>
+                        <textarea class="form-control" id="requestMessage" name="message" rows="3" placeholder="Add a personal message..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Send Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Remove Relationship Modal -->
+<div class="modal fade" id="removeRelationshipModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remove Relationship</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove your relationship with <strong id="removeUserName"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="{% url 'remove_relationship' %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="relationship_id" id="removeRelationshipId">
+                    <button type="submit" class="btn btn-danger">Remove Relationship</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add Relationship Modal
+    const addRelationshipModal = document.getElementById('addRelationshipModal');
+    if (addRelationshipModal) {
+        addRelationshipModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-user-id');
+            const userName = button.getAttribute('data-user-name');
+            document.getElementById('relatedUserId').value = userId;
+            document.getElementById('relatedUserName').textContent = userName;
+        });
+    }
+
+    // Send Request Modal
+    const sendRequestModal = document.getElementById('sendRequestModal');
+    if (sendRequestModal) {
+        sendRequestModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-user-id');
+            const userName = button.getAttribute('data-user-name');
+            document.getElementById('requestUserName').textContent = userName;
+            
+            // Set the form action URL
+            const form = document.getElementById('sendRequestForm');
+            form.action = `/relationships/send-request/${userId}/`;
+        });
+    }
+
+    // Remove Relationship Modal
+    const removeRelationshipModal = document.getElementById('removeRelationshipModal');
+    if (removeRelationshipModal) {
+        removeRelationshipModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const relationshipId = button.getAttribute('data-relationship-id');
+            const userName = button.getAttribute('data-user-name');
+            document.getElementById('removeRelationshipId').value = relationshipId;
+            document.getElementById('removeUserName').textContent = userName;
+        });
+    }
+});
+</script>
+{% endblock %} 
