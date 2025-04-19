@@ -1,0 +1,142 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}Aadhaar Verification - My Village{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-id-card me-2"></i>Aadhaar Verification</h4>
+            </div>
+            <div class="card-body">
+                {% if user.userprofile.aadhaar_verified %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>Your Aadhaar is already verified!
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>Please upload clear images of both sides of your Aadhaar card.
+                    </div>
+                    
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="aadhaar_number" class="form-label">Aadhaar Number</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="aadhaar_number" 
+                                   name="aadhaar_number" 
+                                   pattern="[0-9]{12}" 
+                                   required>
+                            <div class="form-text">Enter your 12-digit Aadhaar number</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="front_image" class="form-label">Front Side of Aadhaar</label>
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="front_image" 
+                                   name="front_image" 
+                                   accept="image/*"
+                                   required>
+                            <div class="form-text">Upload a clear image of the front side</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="back_image" class="form-label">Back Side of Aadhaar</label>
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="back_image" 
+                                   name="back_image" 
+                                   accept="image/*"
+                                   required>
+                            <div class="form-text">Upload a clear image of the back side</div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-shield-alt me-2"></i>Your Aadhaar information will be kept secure and will only be used for verification purposes.
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload me-2"></i>Submit for Verification
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if user.userprofile.aadhaar_verifications.all %}
+        <div class="card shadow mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Verification History</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date Submitted</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for verification in user.userprofile.aadhaar_verifications.all %}
+                            <tr>
+                                <td>{{ verification.submitted_at|date:"M d, Y" }}</td>
+                                <td>
+                                    {% if verification.status == 'pending' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif verification.status == 'approved' %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ verification.notes|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+// Preview uploaded images
+function previewImage(input, previewId) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById(previewId).src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}
+{% endblock %} 

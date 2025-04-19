@@ -1,0 +1,96 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}Add Service - My Village{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0"><i class="fas fa-plus-circle"></i> Add a New Service</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Service Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="service_type" class="form-label">Service Type</label>
+                            <select class="form-select" id="service_type" name="service_type" required>
+                                <option value="">Select type...</option>
+                                <option value="medical">Medical</option>
+                                <option value="education">Education</option>
+                                <option value="transport">Transport</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="village" class="form-label">Village</label>
+                            <select class="form-select" id="village" name="village" required>
+                                <option value="">Select village...</option>
+                                {% for village in villages %}
+                                    <option value="{{ village.id }}">{{ village.name }}, {{ village.district }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="contact_info" class="form-label">Contact Information</label>
+                            <input type="text" class="form-control" id="contact_info" name="contact_info" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="operating_hours" class="form-label">Operating Hours</label>
+                            <input type="text" class="form-control" id="operating_hours" name="operating_hours" placeholder="e.g., Mon-Fri: 9 AM - 5 PM">
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Add Service
+                            </button>
+                            <a href="{% url 'service_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // If user has a village, pre-select it
+        {% if user.is_authenticated and user.userprofile.village %}
+            const villageSelect = document.getElementById('village');
+            for (let i = 0; i < villageSelect.options.length; i++) {
+                if (villageSelect.options[i].value == "{{ user.userprofile.village.id }}") {
+                    villageSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        {% endif %}
+    });
+</script>
+{% endblock %} 

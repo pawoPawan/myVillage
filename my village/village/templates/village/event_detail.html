@@ -1,0 +1,210 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - My Village{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Event Header -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="mb-2">{{ event.title }}</h1>
+                    <p class="lead">
+                        <i class="far fa-calendar-alt"></i> 
+                        {{ event.start_date|date:"F d, Y" }} - {{ event.end_date|date:"F d, Y" }}
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i> 
+                        {{ event.village.name }}, {{ event.village.district }}, {{ event.village.state }}
+                    </p>
+                    <p>
+                        <i class="fas fa-user"></i> Created by: {{ event.created_by.user.get_full_name|default:event.created_by.user.username }}
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    {% if user.is_authenticated %}
+                        {% if user.userprofile.village == event.village %}
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contributeModal">
+                                <i class="fas fa-hand-holding-heart"></i> Contribute
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt"></i> Login to Contribute
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Event Details -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title h4">About the Event</h2>
+                    <p class="card-text">{{ event.description }}</p>
+                    
+                    <h3 class="h5 mt-4">Event Type</h3>
+                    <span class="badge bg-primary">{{ event.event_type|title }}</span>
+                    
+                    {% if event.location %}
+                    <h3 class="h5 mt-4">Location</h3>
+                    <p>{{ event.location }}</p>
+                    {% endif %}
+                    
+                    {% if event.requirements %}
+                    <h3 class="h5 mt-4">Requirements</h3>
+                    <p>{{ event.requirements }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Contributions Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title h4">Contributions</h2>
+                    {% if event.eventcontribution_set.exists %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Contributor</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for contribution in event.eventcontribution_set.all %}
+                                    <tr>
+                                        <td>{{ contribution.contributor.user.get_full_name|default:contribution.contributor.user.username }}</td>
+                                        <td>{{ contribution.get_contribution_type_display }}</td>
+                                        <td>{{ contribution.amount }}</td>
+                                        <td>{{ contribution.created_at|date:"F d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            No contributions yet. Be the first to contribute!
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <!-- Event Stats -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title h5">Event Statistics</h3>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Total Contributions</span>
+                            <span class="badge bg-primary rounded-pill">{{ event.eventcontribution_set.count }}</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Total Amount</span>
+                            <span class="badge bg-success rounded-pill">₹{{ event.total_contribution_amount }}</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Days Until Start</span>
+                            <span class="badge bg-info rounded-pill">{{ event.days_until_start }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Participants -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title h5">Participants</h3>
+                    {% if event.participants.exists %}
+                        <div class="list-group list-group-flush">
+                            {% for participant in event.participants.all %}
+                            <div class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <img src="{% if participant.avatar %}{{ participant.avatar.url }}{% else %}{% static 'village/images/default-avatar.png' %}{% endif %}" 
+                                         alt="{{ participant.user.username }}" 
+                                         class="rounded-circle me-2"
+                                         style="width: 32px; height: 32px;">
+                                    <div>
+                                        <h6 class="mb-0">{{ participant.user.get_full_name|default:participant.user.username }}</h6>
+                                        <small class="text-muted">{{ participant.profession|default:"No profession listed" }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            No participants yet.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contribution Modal -->
+{% if user.is_authenticated and user.userprofile.village == event.village %}
+<div class="modal fade" id="contributeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contribute to {{ event.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="contributionForm" method="post" action="{% url 'event_contribute' event.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="contributionType" class="form-label">Contribution Type</label>
+                        <select class="form-select" id="contributionType" name="contribution_type" required>
+                            <option value="">Select type...</option>
+                            <option value="money">Money</option>
+                            <option value="material">Material</option>
+                            <option value="labor">Labor</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Contribution</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const contributionForm = document.getElementById('contributionForm');
+        if (contributionForm) {
+            contributionForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Add form submission logic here
+                // You can use fetch API to submit the form data
+                console.log('Form submitted');
+            });
+        }
+    });
+</script>
+{% endblock %} 

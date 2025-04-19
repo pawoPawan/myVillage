@@ -1,0 +1,115 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}Members - My Village{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Village Members</h1>
+            
+            {% if user.is_authenticated %}
+            <div class="mb-4">
+                <a href="{% url 'member_create' %}" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Add New Member
+                </a>
+            </div>
+            {% endif %}
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="village" class="form-label">Filter by Village</label>
+                            <select name="village" id="village" class="form-select">
+                                <option value="">All Villages</option>
+                                {% for village in villages %}
+                                <option value="{{ village.id }}" {% if request.GET.village == village.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ village.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="search" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="search" name="search" 
+                                   placeholder="Search by name or occupation" value="{{ request.GET.search }}">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">Filter</button>
+                            <a href="{% url 'member_list' %}" class="btn btn-secondary">Clear</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for member in members %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ member.user.get_full_name }}</h5>
+                            <p class="card-text">
+                                <strong>Village:</strong> {{ member.village.name }}<br>
+                                <strong>Occupation:</strong> {{ member.profession }}<br>
+                                <strong>Email:</strong> {{ member.user.email }}
+                            </p>
+                            <a href="{% url 'member_detail' pk=member.pk %}" class="btn btn-outline-primary">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No members found matching your criteria.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterForm = document.getElementById('filterForm');
+    const memberCards = document.querySelectorAll('.member-card');
+    
+    filterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const villageFilter = document.getElementById('villageFilter').value;
+        const genderFilter = document.getElementById('genderFilter').value;
+        const ageFilter = document.getElementById('ageFilter').value;
+        
+        memberCards.forEach(card => {
+            let show = true;
+            
+            if (villageFilter && card.dataset.village !== villageFilter) {
+                show = false;
+            }
+            
+            if (genderFilter && card.dataset.gender !== genderFilter) {
+                show = false;
+            }
+            
+            if (ageFilter) {
+                const age = parseInt(card.dataset.age);
+                const [min, max] = ageFilter.split('-').map(Number);
+                
+                if (max) {
+                    if (age < min || age > max) show = false;
+                } else {
+                    if (age < min) show = false;
+                }
+            }
+            
+            card.style.display = show ? '' : 'none';
+        });
+    });
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,242 @@
+{% extends 'village/base.html' %}
+{% load static %}
+
+{% block title %}{% if is_edit %}Edit Event{% else %}Create Event{% endif %} - My Village{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">{% if is_edit %}Edit Event{% else %}Create New Event{% endif %}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 
+                        You can create events for your village (<strong>{{ user_village.name }}</strong>) 
+                        or any other village in the same panchayat (<strong>{{ panchayat.name }}</strong>).
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Event Title</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.title.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.event_type.id_for_label }}" class="form-label">Event Type</label>
+                            {{ form.event_type }}
+                            {% if form.event_type.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.event_type.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.description.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.start_date.id_for_label }}" class="form-label">Start Date & Time</label>
+                                {{ form.start_date }}
+                                {% if form.start_date.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.start_date.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.end_date.id_for_label }}" class="form-label">End Date & Time</label>
+                                {{ form.end_date }}
+                                {% if form.end_date.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.end_date.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.village.id_for_label }}" class="form-label">Village</label>
+                            {{ form.village }}
+                            {% if form.village.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.village.errors }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Select the village where this event will take place.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
+                            {{ form.location }}
+                            {% if form.location.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.location.errors }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Specific location within the village (e.g., Community Hall, Temple Ground, etc.)
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.expected_attendees.id_for_label }}" class="form-label">Expected Attendees</label>
+                            {{ form.expected_attendees }}
+                            {% if form.expected_attendees.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.expected_attendees.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    {{ form.is_public }}
+                                    <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
+                                        Public Event
+                                    </label>
+                                </div>
+                                <div class="form-text">If checked, this event will be visible to all village members.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    {{ form.requires_registration }}
+                                    <label class="form-check-label" for="{{ form.requires_registration.id_for_label }}">
+                                        Requires Registration
+                                    </label>
+                                </div>
+                                <div class="form-text">If checked, attendees will need to register for this event.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 registration-deadline-field" style="display: none;">
+                            <label for="{{ form.registration_deadline.id_for_label }}" class="form-label">Registration Deadline</label>
+                            {{ form.registration_deadline }}
+                            {% if form.registration_deadline.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.registration_deadline.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.budget.id_for_label }}" class="form-label">Budget (₹)</label>
+                            {{ form.budget }}
+                            {% if form.budget.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.budget.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.contact_person.id_for_label }}" class="form-label">Contact Person</label>
+                                {{ form.contact_person }}
+                                {% if form.contact_person.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.contact_person.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.contact_phone.id_for_label }}" class="form-label">Contact Phone</label>
+                                {{ form.contact_phone }}
+                                {% if form.contact_phone.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.contact_phone.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.notes.id_for_label }}" class="form-label">Additional Notes</label>
+                            {{ form.notes }}
+                            {% if form.notes.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.notes.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> {% if is_edit %}Update Event{% else %}Create Event{% endif %}
+                            </button>
+                            <a href="{% if is_edit %}{% url 'event_detail' pk=event.pk %}{% else %}{% url 'event_list' %}{% endif %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set default dates to today and tomorrow
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        if (!document.getElementById('id_start_date').value) {
+            document.getElementById('id_start_date').value = today.toISOString().slice(0, 16);
+        }
+        
+        if (!document.getElementById('id_end_date').value) {
+            document.getElementById('id_end_date').value = tomorrow.toISOString().slice(0, 16);
+        }
+        
+        // If user has a village, pre-select it
+        {% if user.is_authenticated and user.userprofile.village %}
+            const villageSelect = document.getElementById('id_village');
+            for (let i = 0; i < villageSelect.options.length; i++) {
+                if (villageSelect.options[i].value == "{{ user.userprofile.village.id }}") {
+                    villageSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        {% endif %}
+        
+        // Show/hide registration deadline based on requires_registration checkbox
+        const requiresRegistrationCheckbox = document.getElementById('id_requires_registration');
+        const registrationDeadlineField = document.querySelector('.registration-deadline-field');
+        
+        function toggleRegistrationDeadline() {
+            if (requiresRegistrationCheckbox.checked) {
+                registrationDeadlineField.style.display = 'block';
+            } else {
+                registrationDeadlineField.style.display = 'none';
+            }
+        }
+        
+        requiresRegistrationCheckbox.addEventListener('change', toggleRegistrationDeadline);
+        toggleRegistrationDeadline(); // Initial state
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,79 @@
+/* Custom styles for My Village */
+
+/* General styles */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Card styles */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand i {
+    margin-right: 0.5rem;
+}
+
+/* Profile images */
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Event and Service cards */
+.event-card, .service-card {
+    height: 100%;
+}
+
+.event-card .card-body, .service-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.event-card .card-text, .service-card .card-text {
+    flex-grow: 1;
+}
+
+/* Contribution badges */
+.contribution-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Village stats */
+.village-stats .card {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.village-stats .card i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #0d6efd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .profile-image {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .village-stats .card {
+        margin-bottom: 1rem;
+    }
+} 

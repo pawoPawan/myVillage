@@ -1,0 +1,222 @@
+{
+    "state_name": "Bihar",
+    "state_code": "10",
+    "districts": [
+        {
+            "district_name": "Araria",
+            "blocks": [
+                {
+                    "block_name": "Forbesganj",
+                    "police_stations": [
+                        {
+                            "name": "Forbesganj Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Forbesganj Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Forbesganj Panchayat",
+                                            "villages": [
+                                                {"name": "Abhaipur"},
+                                                {"name": "Adampur"},
+                                                {"name": "Adharpur"},
+                                                {"name": "Agarpur"},
+                                                {"name": "Ahmadpur"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "district_name": "Patna",
+            "blocks": [
+                {
+                    "block_name": "Bikram",
+                    "police_stations": [
+                        {
+                            "name": "Bikram Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Bikram Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Bikram Panchayat",
+                                            "villages": [
+                                                {"name": "Bikram"},
+                                                {"name": "Bihta"},
+                                                {"name": "Maner"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "block_name": "Danapur",
+                    "police_stations": [
+                        {
+                            "name": "Danapur Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Danapur Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Danapur Panchayat",
+                                            "villages": [
+                                                {"name": "Danapur"},
+                                                {"name": "Phulwari"},
+                                                {"name": "Khusrupur"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "district_name": "Gaya",
+            "blocks": [
+                {
+                    "block_name": "Bodh Gaya",
+                    "police_stations": [
+                        {
+                            "name": "Bodh Gaya Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Bodh Gaya Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Bodh Gaya Panchayat",
+                                            "villages": [
+                                                {"name": "Bodh Gaya"},
+                                                {"name": "Barachatti"},
+                                                {"name": "Belaganj"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "block_name": "Tekari",
+                    "police_stations": [
+                        {
+                            "name": "Tekari Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Tekari Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Tekari Panchayat",
+                                            "villages": [
+                                                {"name": "Tekari"},
+                                                {"name": "Sherghati"},
+                                                {"name": "Wazirganj"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "district_name": "Bhagalpur",
+            "blocks": [
+                {
+                    "block_name": "Sultanganj",
+                    "police_stations": [
+                        {
+                            "name": "Sultanganj Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Sultanganj Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Sultanganj Panchayat",
+                                            "villages": [
+                                                {"name": "Sultanganj"},
+                                                {"name": "Nathnagar"},
+                                                {"name": "Kahalgaon"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "district_name": "Darbhanga",
+            "blocks": [
+                {
+                    "block_name": "Benipur",
+                    "police_stations": [
+                        {
+                            "name": "Benipur Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Benipur Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Benipur Panchayat",
+                                            "villages": [
+                                                {"name": "Benipur"},
+                                                {"name": "Bahadurpur"},
+                                                {"name": "Singhwara"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "district_name": "Madhubani",
+            "blocks": [
+                {
+                    "block_name": "Jhanjharpur",
+                    "police_stations": [
+                        {
+                            "name": "Jhanjharpur Police Station",
+                            "post_offices": [
+                                {
+                                    "name": "Jhanjharpur Post Office",
+                                    "panchayats": [
+                                        {
+                                            "name": "Jhanjharpur Panchayat",
+                                            "villages": [
+                                                {"name": "Jhanjharpur"},
+                                                {"name": "Phulparas"},
+                                                {"name": "Benipatti"}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+} 

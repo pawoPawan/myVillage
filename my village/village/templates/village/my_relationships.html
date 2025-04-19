@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Relationships - My Village{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Relationships</h2>
+        <div>
+            <a href="{% url 'relationship_graph' %}" class="btn btn-info me-2">
+                <i class="fas fa-project-diagram"></i> View Relationship Graph
+            </a>
+            <a href="{% url 'relationship_requests' %}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Relationship Requests
+            </a>
+        </div>
+    </div>
+    // ... existing code ...
+</div>
+{% endblock %} 
